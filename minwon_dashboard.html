@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>민원처리 현황 시각화 개선 기획 대시보드</title>
+<style>
+*{box-sizing:border-box} body{margin:0;background:#f3f6fa;color:#172033;font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif} .wrap{max-width:1440px;margin:0 auto;padding:24px}.header{background:linear-gradient(135deg,#123b68,#1e5d97);color:#fff;padding:24px 28px;border-radius:18px;display:flex;justify-content:space-between;gap:24px;align-items:center;box-shadow:0 10px 30px rgba(23,54,91,.16)}.header h1{font-size:28px;margin:0 0 8px}.header p{margin:0;color:#dbe9f7;font-size:14px}.badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:10px 14px;border-radius:12px;font-weight:700;white-space:nowrap}.grid{display:grid;grid-template-columns:1.05fr 1.4fr 1fr;gap:16px;margin-top:16px}.card{background:#fff;border:1px solid #e4e9f0;border-radius:16px;padding:18px;box-shadow:0 4px 18px rgba(26,44,70,.06)}.card h2{font-size:16px;margin:0 0 13px;color:#173e68}.card h3{font-size:13px;margin:14px 0 7px;color:#486078}.muted{color:#6d7a8b;font-size:12px}.issue{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f4}.issue:last-child{border-bottom:0}.num{width:26px;height:26px;border-radius:8px;background:#e9f2fb;color:#1b5b94;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex:0 0 auto}.issue b{display:block;font-size:13px;margin-bottom:3px}.issue span{font-size:12px;color:#657386}.goal{background:#edf6ff;border-left:4px solid #2a6fae;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}.tasks{display:grid;grid-template-columns:1fr 1fr;gap:10px}.task{border:1px solid #e4eaf1;border-radius:12px;padding:12px;background:#fbfcfe}.task b{font-size:13px;color:#244c75}.task p{font-size:12px;color:#667589;margin:5px 0 0;line-height:1.45}.flow{display:flex;align-items:stretch;gap:7px}.step{flex:1;background:#f5f8fc;border:1px solid #e3e9f0;border-radius:11px;padding:11px 8px;text-align:center;min-width:0}.step strong{display:block;color:#1e5d97;font-size:12px;margin-bottom:4px}.step span{font-size:11px;color:#617084;line-height:1.35}.arrow{display:flex;align-items:center;color:#9aa8b7;font-weight:800}.risk{width:100%;border-collapse:collapse;font-size:12px}.risk th{background:#f2f6fa;color:#42566d;text-align:left;padding:9px;border-bottom:1px solid #dde5ee}.risk td{padding:9px;border-bottom:1px solid #edf0f4;vertical-align:top}.risk tr:last-child td{border-bottom:0}.decision{grid-column:1/-1;background:#fff8e8;border:1px solid #f0d79d;border-radius:16px;padding:18px}.decision h2{margin:0 0 12px;color:#795415;font-size:16px}.decision-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.decision-item{background:#fff;border:1px solid #eed8aa;border-radius:12px;padding:12px}.decision-item b{display:block;font-size:12px;color:#765315;margin-bottom:5px}.decision-item span{font-size:11px;color:#6e6658;line-height:1.45}.status{display:inline-block;background:#fff0d6;color:#9b6200;border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800}.footer{display:flex;justify-content:space-between;margin-top:12px;color:#778596;font-size:10px}.full{grid-column:1/-1}.check{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.check div{background:#f7f9fc;border:1px dashed #ccd6e2;border-radius:10px;padding:9px;text-align:center;font-size:11px;color:#536477}.check b{display:block;color:#2d4e70;margin-bottom:3px}.note{margin-top:10px;font-size:10px;color:#7c8794} @media(max-width:1000px){.grid{grid-template-columns:1fr}.decision-grid,.check{grid-template-columns:1fr 1fr}.flow{flex-wrap:wrap}.arrow{display:none}} @media(max-width:600px){.wrap{padding:12px}.header{align-items:flex-start;flex-direction:column}.tasks,.decision-grid,.check{grid-template-columns:1fr}.header h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="header">
+    <div><h1>민원처리 현황 시각화 개선</h1><p>수작업 취합 및 기준 불일치 개선을 위한 내부 검토용 기획 대시보드</p></div>
+    <div class="badge">기획 초안 · 추가 확인 필요</div>
+  </section>
+
+  <main class="grid">
+    <section class="card">
+      <h2>01. 현황 및 문제점</h2>
+      <div class="issue"><div class="num">1</div><div><b>수작업 자료 취합</b><span>여러 파일의 수치를 복사하여 월말 보고자료 작성</span></div></div>
+      <div class="issue"><div class="num">2</div><div><b>집계 기준 불일치</b><span>부서별 기준 차이로 수치 재확인 반복</span></div></div>
+      <div class="issue"><div class="num">3</div><div><b>핵심 민원 식별 어려움</b><span>긴급·장기 미처리 건을 한눈에 파악하기 어려움</span></div></div>
+    </section>
+
+    <section class="card">
+      <h2>02. 추진 목표 및 주요 과제</h2>
+      <div class="goal"><b>추진 목표</b><br>민원 처리 현황의 입력·집계 방식을 표준화하고 주요 현황을 효율적으로 확인할 수 있는 관리 기반 마련</div>
+      <h3>주요 추진과제</h3>
+      <div class="tasks">
+        <div class="task"><b>① 공통 입력 양식</b><p>부서별 자료 입력 방식 및 집계 기준 표준화</p></div>
+        <div class="task"><b>② KPI 자동 계산</b><p>입력 자료 기반 기본 KPI 자동 집계 검토</p></div>
+        <div class="task"><b>③ 조건별 조회</b><p>부서·상태·긴급도별 필터 기능 구성</p></div>
+        <div class="task"><b>④ 월별 추이</b><p>민원 처리 현황 변화 확인을 위한 차트 구성</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>03. 기대효과</h2>
+      <div class="issue"><div class="num">✓</div><div><b>입력·집계 표준화</b><span>공통 양식 및 기준 적용</span></div></div>
+      <div class="issue"><div class="num">✓</div><div><b>반복 작업 감소 가능</b><span>기본 KPI 자동 계산 활용</span></div></div>
+      <div class="issue"><div class="num">✓</div><div><b>현황 파악 지원</b><span>긴급·장기 미처리 건 식별 편의 향상</span></div></div>
+      <div class="issue"><div class="num">✓</div><div><b>추이 확인 편의</b><span>월별 변화 시각화</span></div></div>
+      <div class="note">※ 정량적 효과는 근거 자료가 없어 별도 산정하지 않음.</div>
+    </section>
+
+    <section class="card full">
+      <h2>04. 실행 절차</h2>
+      <div class="flow">
+        <div class="step"><strong>STEP 1</strong><span>입력항목·집계 기준 정립</span></div><div class="arrow">›</div>
+        <div class="step"><strong>STEP 2</strong><span>KPI 및 산식 정의</span></div><div class="arrow">›</div>
+        <div class="step"><strong>STEP 3</strong><span>필터·차트 화면 구성</span></div><div class="arrow">›</div>
+        <div class="step"><strong>STEP 4</strong><span>구현·시스템 연계 검토</span></div><div class="arrow">›</div>
+        <div class="step"><strong>STEP 5</strong><span>운영·관리체계 마련</span></div><div class="arrow">›</div>
+        <div class="step"><strong>STEP 6</strong><span>적용 및 운영</span></div>
+      </div>
+    </section>
+
+    <section class="card" style="grid-column:span 2">
+      <h2>05. 위험요인 및 대응방안</h2>
+      <table class="risk"><thead><tr><th>위험요인</th><th>대응방안</th></tr></thead><tbody>
+        <tr><td>개인정보 노출</td><td>개인정보를 제외한 집계정보 중심으로 구성</td></tr>
+        <tr><td>기존 시스템 영향</td><td>시스템 변경·연계 필요 여부 별도 검토</td></tr>
+        <tr><td>부서별 집계 기준 차이</td><td>공통 기준 사전 협의</td></tr>
+        <tr><td>운영주체 미정</td><td>담당 부서 및 운영 책임자 확정</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="card">
+      <h2>06. 추가 확인사항</h2>
+      <div class="check">
+        <div><b>일정</b><span class="status">확인 필요</span></div><div><b>예산</b><span class="status">확인 필요</span></div>
+        <div><b>담당부서</b><span class="status">확인 필요</span></div><div><b>운영책임자</b><span class="status">확인 필요</span></div>
+        <div><b>KPI·산식</b><span class="status">확인 필요</span></div><div><b>연계범위</b><span class="status">확인 필요</span></div>
+      </div>
+    </section>
+
+    <section class="decision">
+      <h2>의사결정이 필요한 사항</h2>
+      <div class="decision-grid">
+        <div class="decision-item"><b>① 추진 범위</b><span>공통 입력·KPI·필터·추이 차트의 구현 범위</span></div>
+        <div class="decision-item"><b>② 구축 방식</b><span>별도 구축 또는 기존 시스템 변경·연계 여부</span></div>
+        <div class="decision-item"><b>③ 운영체계</b><span>담당 부서 및 운영 책임자 지정</span></div>
+        <div class="decision-item"><b>④ KPI·성과기준</b><span>KPI 종류·산식 및 성과측정 기준 확정</span></div>
+        <div class="decision-item"><b>⑤ 일정·예산</b><span>추진 범위 확정 후 세부 일정과 예산 검토</span></div>
+      </div>
+    </section>
+  </main>
+  <div class="footer"><span>내부 검토용</span><span>※ 미확정 정보는 임의 산정하지 않음</span></div>
+</div>
+</body>
+</html>
