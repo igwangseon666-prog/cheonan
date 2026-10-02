@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>다이어트 운동 우선순위 룰렛</title>
+<style>
+:root{
+  --bg:#f6f8fb; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+  --line:#e5e7eb; --primary:#4f46e5; --primary2:#7c3aed;
+  --accent:#ec4899; --good:#10b981; --shadow:0 14px 34px rgba(31,41,55,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#eef2ff 0,#f8fafc 34%,#f6f8fb 100%);
+  color:var(--text);
+}
+.container{max-width:1180px;margin:0 auto;padding:28px 18px 56px}
+.hero{
+  display:flex;justify-content:space-between;gap:18px;align-items:flex-end;
+  margin-bottom:22px;
+}
+.hero h1{margin:0;font-size:clamp(28px,4vw,44px);letter-spacing:-.03em}
+.hero p{margin:8px 0 0;color:var(--muted);line-height:1.6}
+.badge{
+  flex:0 0 auto;padding:10px 14px;border-radius:999px;
+  background:#fff;border:1px solid #ddd6fe;color:#5b21b6;font-weight:800;
+  box-shadow:var(--shadow)
+}
+.grid{display:grid;grid-template-columns:1.25fr .95fr;gap:20px}
+.panel{
+  background:rgba(255,255,255,.92); border:1px solid rgba(229,231,235,.9);
+  border-radius:24px; box-shadow:var(--shadow); padding:20px;
+}
+.panel h2{margin:0 0 14px;font-size:20px}
+.cards{display:grid;gap:12px}
+.exercise-card{
+  border:1px solid var(--line);border-radius:18px;padding:15px;background:#fff;
+  transition:.2s ease;
+}
+.exercise-card:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(31,41,55,.06)}
+.toprow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.num{
+  width:32px;height:32px;border-radius:10px;background:#eef2ff;color:#4338ca;
+  display:grid;place-items:center;font-weight:900
+}
+.name{
+  flex:1;min-width:0;border:1px solid var(--line);border-radius:11px;
+  padding:10px 12px;font-size:15px;font-weight:700;outline:none
+}
+.name:focus{border-color:#a5b4fc;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.remove{
+  border:0;background:#f3f4f6;color:#6b7280;border-radius:10px;width:36px;height:36px;
+  cursor:pointer;font-size:18px
+}
+.sliders{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sliderbox{
+  background:#f9fafb;border-radius:14px;padding:10px 11px;border:1px solid #f0f1f3
+}
+.sliderlabel{display:flex;justify-content:space-between;font-size:13px;font-weight:800;margin-bottom:8px}
+.sliderlabel span:last-child{
+  min-width:26px;text-align:center;background:#fff;border:1px solid var(--line);
+  border-radius:8px;padding:2px 5px;color:#4338ca
+}
+input[type=range]{width:100%;accent-color:var(--primary)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{
+  border:0;border-radius:13px;padding:12px 16px;font-weight:900;cursor:pointer;
+  transition:.15s ease;font-size:14px
+}
+button:active{transform:scale(.98)}
+.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}
+.secondary{background:#111827;color:#fff}
+.ghost{background:#f3f4f6;color:#374151}
+button:disabled{opacity:.45;cursor:not-allowed}
+.formula{
+  margin-top:14px;padding:12px 14px;background:#f8fafc;border-radius:14px;
+  color:#4b5563;font-size:13px;line-height:1.55;border:1px dashed #d1d5db
+}
+.results{display:grid;gap:10px}
+.empty{
+  color:var(--muted);text-align:center;padding:28px 12px;border:1px dashed #d1d5db;
+  border-radius:16px;background:#fafafa
+}
+.result{
+  border:1px solid var(--line);border-radius:16px;padding:13px;background:#fff;
+  position:relative;overflow:hidden
+}
+.result.best{
+  border:2px solid #8b5cf6;
+  background:linear-gradient(135deg,#faf5ff,#eef2ff)
+}
+.result.best:after{
+  content:"TOP";position:absolute;top:8px;right:8px;font-size:11px;font-weight:900;
+  background:#6d28d9;color:#fff;padding:4px 7px;border-radius:999px
+}
+.result-head{display:flex;align-items:center;gap:10px;margin-bottom:9px;padding-right:42px}
+.rank{
+  font-weight:900;color:#fff;background:#111827;border-radius:9px;padding:5px 8px;font-size:12px
+}
+.result-name{font-weight:900;flex:1}
+.score{font-weight:950;color:#4f46e5;font-size:18px}
+.bar{height:12px;background:#eef2f7;border-radius:999px;overflow:hidden}
+.fill{
+  height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,#6366f1,#8b5cf6,#ec4899);
+  transition:width .7s cubic-bezier(.2,.8,.2,1)
+}
+.roulette-wrap{margin-top:20px;text-align:center}
+.wheel-area{
+  display:grid;place-items:center;position:relative;margin:8px auto 14px;
+  width:min(390px,84vw);aspect-ratio:1
+}
+.pointer{
+  position:absolute;top:-4px;z-index:5;width:0;height:0;
+  border-left:16px solid transparent;border-right:16px solid transparent;
+  border-top:34px solid #111827;filter:drop-shadow(0 4px 4px rgba(0,0,0,.18))
+}
+.wheel{
+  width:100%;height:100%;border-radius:50%;position:relative;
+  border:10px solid #fff;box-shadow:0 18px 35px rgba(31,41,55,.16);
+  transition:transform 4.8s cubic-bezier(.12,.7,.08,1);
+  overflow:hidden;background:#ddd
+}
+.wheel-labels{
+  position:absolute;inset:0;border-radius:50%;pointer-events:none
+}
+.label{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  width:96px;
+  min-height:42px;
+  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(11px,1.8vw,14px);
+  font-weight:950;
+  color:white;
+  text-shadow:0 1px 3px rgba(0,0,0,.52);
+  line-height:1.18;
+}
+.label span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-height:42px;
+  padding:4px 6px;
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+  text-align:center;
+  border-radius:10px;
+  background:rgba(17,24,39,.12);
+  backdrop-filter:blur(1px);
+}
+.hub{
+  position:absolute;width:78px;height:78px;border-radius:50%;background:#fff;
+  box-shadow:0 7px 16px rgba(0,0,0,.15);display:grid;place-items:center;
+  font-weight:950;color:#5b21b6;z-index:4;border:7px solid #ede9fe
+}
+.pick{
+  min-height:54px;display:grid;place-items:center;padding:12px 14px;
+  border-radius:16px;background:#111827;color:#fff;font-weight:900;margin-top:12px
+}
+.notice{
+  margin-top:10px;font-size:12px;color:#6b7280;line-height:1.5;
+  padding:10px 12px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px
+}
+@media(max-width:880px){
+  .grid{grid-template-columns:1fr}
+  .hero{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:620px){
+  .container{padding:18px 12px 40px}
+  .panel{padding:14px;border-radius:18px}
+  .sliders{grid-template-columns:1fr}
+  .actions button{flex:1 1 100%}
+  .label{font-size:10.5px;width:78px;min-height:36px}
+  .label span{min-height:36px;padding:3px 4px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="hero">
+    <div>
+      <h1>다이어트 운동 우선순위 룰렛</h1>
+      <p>운동 후보를 점수로 비교하고, 마지막에는 룰렛으로 오늘 먼저 할 운동을 재미있게 골라보세요.</p>
+    </div>
+    <div class="badge">🏃 최대 6개 운동</div>
+  </header>
+
+  <main class="grid">
+    <section class="panel">
+      <h2>운동 후보 입력</h2>
+      <div id="cards" class="cards"></div>
+
+      <div class="actions">
+        <button class="ghost" id="addBtn">+ 운동 추가</button>
+        <button class="primary" id="calcBtn">우선순위 계산</button>
+        <button class="secondary" id="spinBtn">🎯 오늘 먼저 볼 운동 뽑기</button>
+      </div>
+
+      <div class="formula">
+        <strong>계산식</strong><br>
+        중요도 × 40 + 긴급도 × 35 + 영향도 × 25<br>
+        최대 원점수 500점을 100점 기준으로 환산합니다.
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>우선순위 결과</h2>
+      <div id="results" class="results">
+        <div class="empty">운동별 값을 조정한 뒤<br><b>우선순위 계산</b>을 눌러주세요.</div>
+      </div>
+
+      <div class="roulette-wrap">
+        <h2 style="margin-top:22px">오늘의 운동 룰렛</h2>
+        <div class="wheel-area">
+          <div class="pointer"></div>
+          <div id="wheel" class="wheel"></div>
+          <div id="wheelLabels" class="wheel-labels"></div>
+          <div class="hub">GO!</div>
+        </div>
+        <div id="pick" class="pick">버튼을 눌러 오늘 먼저 볼 운동을 뽑아보세요.</div>
+        <div class="notice">
+          ※ 룰렛 결과는 재미 요소입니다. 실제 운동 우선순위와 운동 강도는 개인의 컨디션, 안전, 일정 등을 함께 고려해 판단하세요.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const defaults = ["수영","달리기","등산","피트니스","숨만쉬기","잠자기"];
+const colors = ["#6366f1","#8b5cf6","#ec4899","#f59e0b","#10b981","#0ea5e9"];
+const cards = document.getElementById("cards");
+const results = document.getElementById("results");
+const addBtn = document.getElementById("addBtn");
+const calcBtn = document.getElementById("calcBtn");
+const spinBtn = document.getElementById("spinBtn");
+const wheel = document.getElementById("wheel");
+const wheelLabels = document.getElementById("wheelLabels");
+const pick = document.getElementById("pick");
+let spinDeg = 0;
+let spinning = false;
+
+function makeCard(name=""){
+  const idx = cards.children.length + 1;
+  const div = document.createElement("div");
+  div.className = "exercise-card";
+  div.innerHTML = `
+    <div class="toprow">
+      <div class="num">${idx}</div>
+      <input class="name" maxlength="24" value="${name}" placeholder="운동 이름 입력">
+      <button class="remove" title="삭제">×</button>
+    </div>
+    <div class="sliders">
+      ${sliderHtml("중요도","importance",3)}
+      ${sliderHtml("긴급도","urgency",3)}
+      ${sliderHtml("영향도","impact",3)}
+    </div>`;
+  cards.appendChild(div);
+  div.querySelectorAll("input[type=range]").forEach(r=>{
+    r.addEventListener("input",()=>r.closest(".sliderbox").querySelector(".val").textContent=r.value);
+  });
+  div.querySelector(".name").addEventListener("input", drawWheel);
+  div.querySelector(".remove").addEventListener("click",()=>{
+    div.remove(); renumber(); drawWheel();
+  });
+  renumber(); drawWheel();
+}
+function sliderHtml(label, cls, val){
+  return `<div class="sliderbox">
+    <div class="sliderlabel"><span>${label}</span><span class="val">${val}</span></div>
+    <input class="${cls}" type="range" min="1" max="5" value="${val}" step="1">
+  </div>`;
+}
+function renumber(){
+  [...cards.children].forEach((c,i)=>c.querySelector(".num").textContent=i+1);
+  addBtn.disabled = cards.children.length >= 6;
+}
+function getData(){
+  return [...cards.children].map((c,i)=>({
+    idx:i,
+    name:c.querySelector(".name").value.trim() || `운동 ${i+1}`,
+    importance:+c.querySelector(".importance").value,
+    urgency:+c.querySelector(".urgency").value,
+    impact:+c.querySelector(".impact").value
+  }));
+}
+function calculate(){
+  const data = getData().map(x=>{
+    const raw = x.importance*40 + x.urgency*35 + x.impact*25;
+    return {...x, score: raw/5};
+  }).sort((a,b)=>b.score-a.score || a.idx-b.idx);
+
+  results.innerHTML = "";
+  data.forEach((x,i)=>{
+    const row = document.createElement("div");
+    row.className = "result" + (i===0 ? " best":"");
+    row.innerHTML = `
+      <div class="result-head">
+        <span class="rank">${i+1}위</span>
+        <span class="result-name">${escapeHtml(x.name)}</span>
+        <span class="score">${x.score.toFixed(1)}점</span>
+      </div>
+      <div class="bar"><div class="fill" style="width:0%"></div></div>`;
+    results.appendChild(row);
+    requestAnimationFrame(()=>row.querySelector(".fill").style.width=x.score+"%");
+  });
+}
+function drawWheel(){
+  const data = getData();
+  const n = Math.max(1,data.length);
+  const slice = 360/n;
+  let stops = [];
+  for(let i=0;i<n;i++){
+    stops.push(`${colors[i%colors.length]} ${i*slice}deg ${(i+1)*slice}deg`);
+  }
+  wheel.style.background = `conic-gradient(from -90deg, ${stops.join(",")})`;
+  wheelLabels.innerHTML = "";
+  data.forEach((x,i)=>{
+    const angle = -90 + i*slice + slice/2;
+    const rad = angle * Math.PI / 180;
+    // 각 부채꼴의 시각적 중심(허브와 외곽 사이의 중앙)에 라벨 배치
+    const radius = n >= 5 ? 31.5 : (n === 4 ? 30 : 28);
+    const xPos = 50 + Math.cos(rad) * radius;
+    const yPos = 50 + Math.sin(rad) * radius;
+    const label = document.createElement("div");
+    label.className="label";
+    label.style.left = `${xPos}%`;
+    label.style.top = `${yPos}%`;
+    const span = document.createElement("span");
+    span.textContent = x.name;
+    label.appendChild(span);
+    wheelLabels.appendChild(label);
+  });
+}
+function spin(){
+  const data = getData();
+  if(spinning || !data.length) return;
+  spinning = true; spinBtn.disabled = true;
+  pick.textContent = "룰렛이 운동을 고르는 중...";
+  const n = data.length;
+  const chosen = Math.floor(Math.random()*n);
+  const slice = 360/n;
+  const targetCenter = chosen*slice + slice/2;
+  const extra = 5*360 + (360 - targetCenter);
+  spinDeg += extra;
+  wheel.style.transform = `rotate(${spinDeg}deg)`;
+  wheelLabels.style.transition = "transform 4.8s cubic-bezier(.12,.7,.08,1)";
+  wheelLabels.style.transform = `rotate(${spinDeg}deg)`;
+  setTimeout(()=>{
+    pick.innerHTML = `오늘 먼저 볼 운동은 <strong>🎉 ${escapeHtml(data[chosen].name)}</strong>`;
+    spinning = false; spinBtn.disabled = false;
+  },4900);
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+addBtn.addEventListener("click",()=>{ if(cards.children.length<6) makeCard(""); });
+calcBtn.addEventListener("click",calculate);
+spinBtn.addEventListener("click",spin);
+
+defaults.forEach(makeCard);
+drawWheel();
+</script>
+</body>
+</html>
